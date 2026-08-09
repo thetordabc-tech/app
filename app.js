@@ -1,20 +1,26 @@
 const API_BASE = "https://www.worldtides.info/api/v3";
 const API_KEY_STORAGE = "worldtides_api_key";
 const REFRESH_MS = 5 * 60 * 1000; // refetch extremes every 5 minutes
-const TICK_MS = 1000; // recompute animated fill every second
+const TICK_MS = 1000; // recompute animated fill / sky / clock every second
 
 const waterEl = document.getElementById("water");
-const trendEl = document.getElementById("trend");
-const trendArrowEl = document.getElementById("trend-arrow");
-const trendLabelEl = document.getElementById("trend-label");
+const arrowEl = document.getElementById("tide-arrow");
 const placeEl = document.getElementById("place");
-const levelEl = document.getElementById("level");
+const clockEl = document.getElementById("clock");
+const sunEl = document.getElementById("sun");
+const moonEl = document.getElementById("moon");
+const highValueEl = document.getElementById("high-value");
+const highEtaEl = document.getElementById("high-eta");
+const currentValueEl = document.getElementById("current-value");
+const lowValueEl = document.getElementById("low-value");
+const lowEtaEl = document.getElementById("low-eta");
 const statusEl = document.getElementById("status");
 const settingsBtn = document.getElementById("settings-btn");
 const settingsPanel = document.getElementById("settings-panel");
 const apiKeyInput = document.getElementById("api-key-input");
 const saveKeyBtn = document.getElementById("save-key-btn");
 const closeSettingsBtn = document.getElementById("close-settings-btn");
+const rootStyle = document.documentElement.style;
 
 let cachedExtremes = null;
 let tickTimer = null;
@@ -115,12 +121,61 @@ function computeTideState(extremes, nowSeconds) {
   }
   fillPct = Math.max(10, Math.min(100, fillPct));
 
-  return { fillPct, rising, currentHeight, next, prev };
+  const nextHigh = sorted.find((e) => e.dt > nowSeconds && e.type === "High") || null;
+  const nextLow = sorted.find((e) => e.dt > nowSeconds && e.type === "Low") || null;
+
+  return { fillPct, rising, currentHeight, nextHigh, nextLow };
+}
+
+function formatTime(unixSeconds) {
+  const d = new Date(unixSeconds * 1000);
+  return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+
+function formatClock(date) {
+  return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+
+function lerpColor(a, b, f) {
+  const c = [0, 1, 2].map((i) => Math.round(a[i] + (b[i] - a[i]) * f));
+  return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+}
+
+const SKY_NIGHT_1 = [6, 16, 28], SKY_NIGHT_2 = [10, 26, 42];
+const SKY_DAY_1 = [191, 232, 250], SKY_DAY_2 = [230, 246, 252];
+
+function updateSky(date) {
+  const t = (date.getHours() + date.getMinutes() / 60 + date.getSeconds() / 3600) / 24;
+  const brightness = (Math.sin((t - 0.25) * 2 * Math.PI) + 1) / 2; // 0 midnight, 1 noon
+
+  rootStyle.setProperty("--sky-1", lerpColor(SKY_NIGHT_1, SKY_DAY_1, brightness));
+  rootStyle.setProperty("--sky-2", lerpColor(SKY_NIGHT_2, SKY_DAY_2, brightness));
+
+  const dayStart = 0.25, dayEnd = 0.75; // 6am - 6pm
+  const isDay = t >= dayStart && t < dayEnd;
+  const progress = isDay
+    ? (t - dayStart) / (dayEnd - dayStart)
+    : ((t >= dayEnd ? t - dayEnd : t + (1 - dayEnd)) / (1 - (dayEnd - dayStart)));
+  const elevation = Math.sin(progress * Math.PI);
+
+  const top = 62 - elevation * 54; // % from top of sky
+  const left = 8 + progress * 84; // % from left
+
+  const activeEl = isDay ? sunEl : moonEl;
+  const inactiveEl = isDay ? moonEl : sunEl;
+  activeEl.style.top = top + "%";
+  activeEl.style.left = left + "%";
+  activeEl.style.opacity = String(elevation);
+  inactiveEl.style.opacity = "0";
 }
 
 function render() {
+  const now = new Date();
+  clockEl.textContent = formatClock(now);
+  updateSky(now);
+
   if (!cachedExtremes) return;
-  const nowSeconds = Date.now() / 1000;
+  const nowSeconds = now.getTime() / 1000;
   const state = computeTideState(cachedExtremes.extremes, nowSeconds);
   if (!state) {
     setStatus("Waiting for more tide data…");
@@ -129,20 +184,17 @@ function render() {
   setStatus("");
 
   waterEl.style.height = `${state.fillPct}%`;
+  arrowEl.classList.toggle("falling", !state.rising);
+  currentValueEl.textContent = state.currentHeight.toFixed(2) + " m";
 
-  trendEl.classList.remove("hidden", "rising", "falling");
-  trendEl.classList.add(state.rising ? "rising" : "falling");
-  trendArrowEl.textContent = "↑";
-  trendLabelEl.textContent = state.rising ? "Rising" : "Falling";
-
-  levelEl.textContent = `${state.currentHeight.toFixed(2)} m — next ${
-    state.next.type
-  } ${formatTime(state.next.dt)}`;
-}
-
-function formatTime(unixSeconds) {
-  const d = new Date(unixSeconds * 1000);
-  return d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  if (state.nextHigh) {
+    highValueEl.textContent = state.nextHigh.height.toFixed(1) + " m";
+    highEtaEl.textContent = formatTime(state.nextHigh.dt);
+  }
+  if (state.nextLow) {
+    lowValueEl.textContent = state.nextLow.height.toFixed(1) + " m";
+    lowEtaEl.textContent = formatTime(state.nextLow.dt);
+  }
 }
 
 async function loadTides() {
@@ -202,6 +254,7 @@ function locate() {
 function start() {
   locate();
   startTimers();
+  render();
 }
 
 start();

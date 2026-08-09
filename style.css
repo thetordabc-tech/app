@@ -1,10 +1,15 @@
 :root {
-  --sky-top: #dff3ff;
-  --sky-bottom: #f7fcff;
-  --water-top: #2fa8d8;
-  --water-bottom: #0a5c8a;
-  --text: #06304a;
-  --panel-bg: rgba(255, 255, 255, 0.92);
+  --sky-1: #bfe8fa;
+  --sky-2: #e6f6fc;
+  --panel-bg: rgba(255, 255, 255, 0.86);
+  --panel-border: rgba(6, 32, 51, 0.1);
+  --ink: #062033;
+  --ink-soft: #4a6883;
+  --sea-shallow: #8fe0fb;
+  --sea-mid: #4fc3ee;
+  --sea-deep: #1f9bd6;
+  --rise: #1f9d55;
+  --fall: #c1502a;
 }
 
 * {
@@ -13,14 +18,61 @@
 
 html, body {
   margin: 0;
-  padding: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
-  color: var(--text);
+  background: var(--sky-2);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+.outlined {
+  color: #ffffff;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+/* --- sky / sun / moon --- */
+
+#sky {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--sky-1), var(--sky-2) 62%);
+  transition: background 3s linear;
+  overflow: hidden;
+}
+
+.celestial {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 2s ease, top 3s linear, left 3s linear;
+  opacity: 0;
+}
+
+#sun {
+  background: radial-gradient(circle at 35% 35%, #fff6d8, #ffd166 60%, #ffb703 100%);
+  box-shadow: 0 0 44px 14px rgba(255, 209, 102, 0.55);
+}
+
+#moon {
+  background:
+    radial-gradient(circle at 30% 66%, rgba(148, 165, 184, 0.55) 0%, rgba(148, 165, 184, 0.55) 16%, transparent 17%),
+    radial-gradient(circle at 62% 28%, rgba(148, 165, 184, 0.5) 0%, rgba(148, 165, 184, 0.5) 11%, transparent 12%),
+    radial-gradient(circle at 70% 62%, rgba(148, 165, 184, 0.45) 0%, rgba(148, 165, 184, 0.45) 9%, transparent 10%),
+    radial-gradient(circle at 42% 45%, rgba(148, 165, 184, 0.4) 0%, rgba(148, 165, 184, 0.4) 7%, transparent 8%),
+    radial-gradient(circle at 22% 30%, rgba(148, 165, 184, 0.35) 0%, rgba(148, 165, 184, 0.35) 6%, transparent 7%),
+    radial-gradient(circle at 35% 35%, #ffffff, #dbe6f2 55%, #aebfce 100%);
+  box-shadow: 0 0 28px 9px rgba(220, 230, 245, 0.4), inset -6px -6px 10px rgba(120, 140, 160, 0.35);
+}
+
+/* --- ocean / water --- */
 
 #ocean {
   position: fixed;
@@ -34,28 +86,114 @@ html, body {
   right: 0;
   bottom: 0;
   height: 10%;
-  min-height: 40px;
-  background: linear-gradient(to bottom, var(--water-top), var(--water-bottom));
+  background: linear-gradient(to bottom, var(--sea-shallow), var(--sea-mid) 55%, var(--sea-deep));
   transition: height 1.2s ease-in-out;
-  box-shadow: 0 0 40px rgba(10, 92, 138, 0.5) inset;
+}
+
+#wave-wrap {
+  position: absolute;
+  top: -28px;
+  left: 0;
+  width: 100%;
+  height: 32px;
+  overflow: hidden;
 }
 
 #wave-svg {
   position: absolute;
-  top: -20px;
+  top: 0;
   left: 0;
   width: 200%;
-  height: 40px;
-  fill: var(--water-top);
-  animation: drift 8s linear infinite;
+  height: 32px;
+  animation: drift 9s linear infinite;
 }
+#wave-svg path { fill: var(--sea-shallow); }
 
 @keyframes drift {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
 
-#hud {
+@media (prefers-reduced-motion: reduce) {
+  #wave-svg { animation: none; }
+}
+
+/* --- tide arrow --- */
+
+#tide-arrow-wrap {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transition: top 1.2s ease-in-out;
+  animation: bob 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tide-arrow-wrap { animation: none; }
+}
+
+#tide-arrow {
+  display: block;
+  font-size: clamp(56px, 16vw, 108px);
+  line-height: 1;
+  color: #ffffff;
+  opacity: 0.92;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  transition: transform 0.5s ease;
+  user-select: none;
+}
+
+#tide-arrow.falling {
+  transform: rotate(180deg);
+}
+
+/* --- fish --- */
+
+.fish {
+  position: absolute;
+  left: 0;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.fish svg { display: block; width: 100%; height: 100%; }
+.fish.flip svg { transform: scaleX(-1); }
+
+#fish-1 { bottom: 5%;  width: 30px; height: 17px; animation-name: swim-right; animation-duration: 15s; }
+#fish-2 { bottom: 34%; width: 22px; height: 13px; animation-name: swim-left;  animation-duration: 21s; animation-delay: -4s; }
+#fish-3 { bottom: 58%; width: 26px; height: 15px; animation-name: swim-right; animation-duration: 18s; animation-delay: -9s; }
+
+@keyframes swim-right {
+  0%   { transform: translate(-15vw, 0); }
+  25%  { transform: translate(28vw, -5px); }
+  50%  { transform: translate(65vw, 4px); }
+  75%  { transform: translate(98vw, -4px); }
+  100% { transform: translate(115vw, 0); }
+}
+
+@keyframes swim-left {
+  0%   { transform: translate(115vw, 0); }
+  25%  { transform: translate(72vw, 5px); }
+  50%  { transform: translate(35vw, -4px); }
+  75%  { transform: translate(2vw, 4px); }
+  100% { transform: translate(-15vw, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fish { animation: none; display: none; }
+}
+
+/* --- HUD --- */
+
+#hud-top {
   position: fixed;
   top: 0;
   left: 0;
@@ -63,73 +201,90 @@ html, body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 20px;
-  pointer-events: none;
+  gap: 10px;
+  padding: max(16px, env(safe-area-inset-top)) 16px 0;
 }
 
-#trend {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.panel {
   background: var(--panel-bg);
-  border-radius: 999px;
-  padding: 8px 16px;
-  font-size: 16px;
-  font-weight: 600;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  pointer-events: auto;
-}
-
-#trend.hidden {
-  display: none;
-}
-
-#trend-arrow {
-  font-size: 20px;
-  line-height: 1;
-  transition: transform 0.3s ease;
-}
-
-#trend.rising #trend-arrow {
-  color: #1a7a3c;
-}
-
-#trend.falling #trend-arrow {
-  color: #b23b1f;
-  transform: rotate(180deg);
-}
-
-#info {
-  text-align: right;
-  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 14px;
-  padding: 10px 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-  pointer-events: auto;
-  min-width: 160px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(6, 32, 51, 0.14);
 }
 
 #place {
+  padding: 8px 14px;
+  font-size: 13px;
   font-weight: 700;
-  font-size: 14px;
+  max-width: 60vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-#level {
-  font-size: 13px;
-  opacity: 0.75;
+#clock {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 17px;
+  font-weight: 600;
+  padding-top: 8px;
+}
+
+#side-info {
+  position: fixed;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.side-row .side-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.side-row .side-value {
+  display: block;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 19px;
+  font-weight: 600;
   margin-top: 2px;
 }
 
+.side-row .side-eta {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-top: 1px;
+}
+
+.side-row-current .side-value {
+  font-size: 26px;
+}
+
 #settings-btn {
-  pointer-events: auto;
-  border: none;
-  background: var(--panel-bg);
+  position: fixed;
+  right: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  border: 1px solid var(--panel-border);
   border-radius: 999px;
   width: 40px;
   height: 40px;
   font-size: 18px;
   cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  color: var(--ink);
 }
 
 #status {
@@ -137,18 +292,21 @@ html, body {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
   padding: 8px 14px;
   border-radius: 8px;
   font-size: 13px;
-  max-width: 90vw;
+  max-width: 80vw;
   text-align: center;
+  pointer-events: none;
 }
 
 #status:empty {
   display: none;
 }
+
+/* --- settings panel --- */
 
 #settings-panel {
   position: fixed;
@@ -159,7 +317,8 @@ html, body {
   border-radius: 16px;
   padding: 24px;
   width: min(90vw, 360px);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  color: var(--ink);
 }
 
 #settings-panel.hidden {
@@ -194,7 +353,7 @@ html, body {
 }
 
 #settings-panel .hint a {
-  color: var(--water-bottom);
+  color: var(--sea-deep);
 }
 
 .settings-actions {
@@ -213,11 +372,11 @@ html, body {
 }
 
 #save-key-btn {
-  background: var(--water-bottom);
+  background: var(--sea-deep);
   color: #fff;
 }
 
 #close-settings-btn {
   background: #eee;
-  color: var(--text);
+  color: var(--ink);
 }
