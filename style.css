@@ -191,6 +191,56 @@ html, body {
   .fish { animation: none; display: none; }
 }
 
+/* --- rowboat with fisherman --- */
+
+#rowboat {
+  position: absolute;
+  top: 14px;
+  left: 24%;
+  width: 62px;
+  height: 118px;
+  transform-origin: 50% 20%;
+  animation: rowboat-bob 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+#rowboat svg { display: block; width: 100%; height: 100%; }
+
+@keyframes rowboat-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(7px) rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #rowboat { animation: none; }
+}
+
+/* --- trawler, passes by roughly once a minute --- */
+
+#trawler {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 150px;
+  height: 130px;
+  animation: trawler-pass 60s linear infinite;
+  pointer-events: none;
+}
+
+#trawler svg { display: block; width: 100%; height: 100%; }
+
+@keyframes trawler-pass {
+  0%   { transform: translateX(-20vw); opacity: 0; }
+  1%   { opacity: 1; }
+  25%  { transform: translateX(120vw); opacity: 1; }
+  26%  { opacity: 0; }
+  100% { transform: translateX(-20vw); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #trawler { animation: none; opacity: 0; }
+}
+
 /* --- HUD --- */
 
 #hud-top {
