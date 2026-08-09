@@ -3,7 +3,7 @@
   "appName": "Tide",
   "webDir": "www",
   "server": {
-    "url": "https://REPLACE-WITH-YOUR-VERCEL-DOMAIN.vercel.app",
+    "url": "https://app-lemon-seven-yoidju434j.vercel.app",
     "cleartext": false
   }
 }
