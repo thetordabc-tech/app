@@ -1,0 +1,9 @@
+{
+  "appId": "com.tordabc.tide",
+  "appName": "Tide",
+  "webDir": "www",
+  "server": {
+    "url": "https://REPLACE-WITH-YOUR-VERCEL-DOMAIN.vercel.app",
+    "cleartext": false
+  }
+}
