@@ -81,7 +81,7 @@ async function fetchViaProxy(lat, lon) {
 async function fetchDirect(lat, lon, apiKey) {
   const start = Math.floor(Date.now() / 1000) - 86400;
   const length = 3 * 86400;
-  const url = `${API_BASE}?extremes&lat=${lat}&lon=${lon}&key=${encodeURIComponent(
+  const url = `${API_BASE}?extremes&datum=MSL&lat=${lat}&lon=${lon}&key=${encodeURIComponent(
     apiKey
   )}&start=${start}&length=${length}`;
   const res = await fetch(url);
