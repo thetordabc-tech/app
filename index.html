@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tide</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="ocean">
+    <div id="water">
+      <svg id="wave-svg" viewBox="0 0 1200 40" preserveAspectRatio="none">
+        <path id="wave-path" d="M0,20 C300,40 900,0 1200,20 L1200,40 L0,40 Z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div id="hud">
+    <div id="trend" class="hidden">
+      <span id="trend-arrow">&#8593;</span>
+      <span id="trend-label">Rising</span>
+    </div>
+    <div id="info">
+      <div id="place">Locating…</div>
+      <div id="level"></div>
+    </div>
+    <button id="settings-btn" title="Settings">&#9881;</button>
+  </div>
+
+  <div id="status"></div>
+
+  <div id="settings-panel" class="hidden">
+    <h2>Settings</h2>
+    <label for="api-key-input">WorldTides API key</label>
+    <input id="api-key-input" type="text" placeholder="Paste your WorldTides API key" autocomplete="off" />
+    <p class="hint">
+      Get a free key at
+      <a href="https://www.worldtides.info/register" target="_blank" rel="noopener">worldtides.info</a>.
+      The key is stored only in your browser.
+    </p>
+    <div class="settings-actions">
+      <button id="save-key-btn">Save</button>
+      <button id="close-settings-btn">Close</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
