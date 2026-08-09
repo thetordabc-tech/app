@@ -1,5 +1,3 @@
-const API_BASE = "https://www.worldtides.info/api/v3";
-const API_KEY_STORAGE = "worldtides_api_key";
 const REFRESH_MS = 5 * 60 * 1000; // refetch extremes every 5 minutes
 const TICK_MS = 1000; // recompute animated fill / sky / clock every second
 
@@ -15,11 +13,6 @@ const currentValueEl = document.getElementById("current-value");
 const lowValueEl = document.getElementById("low-value");
 const lowEtaEl = document.getElementById("low-eta");
 const statusEl = document.getElementById("status");
-const settingsBtn = document.getElementById("settings-btn");
-const settingsPanel = document.getElementById("settings-panel");
-const apiKeyInput = document.getElementById("api-key-input");
-const saveKeyBtn = document.getElementById("save-key-btn");
-const closeSettingsBtn = document.getElementById("close-settings-btn");
 const rootStyle = document.documentElement.style;
 
 let cachedExtremes = null;
@@ -27,66 +20,26 @@ let tickTimer = null;
 let refreshTimer = null;
 let currentCoords = null;
 
-function getApiKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || "";
-}
-
-function setApiKey(key) {
-  localStorage.setItem(API_KEY_STORAGE, key.trim());
-}
-
 function setStatus(msg) {
   statusEl.textContent = msg || "";
 }
-
-function openSettings() {
-  apiKeyInput.value = getApiKey();
-  settingsPanel.classList.remove("hidden");
-}
-
-function closeSettings() {
-  settingsPanel.classList.add("hidden");
-}
-
-settingsBtn.addEventListener("click", openSettings);
-closeSettingsBtn.addEventListener("click", closeSettings);
-saveKeyBtn.addEventListener("click", () => {
-  const key = apiKeyInput.value.trim();
-  if (!key) return;
-  setApiKey(key);
-  closeSettings();
-  setStatus("");
-  start();
-});
 
 function roundToGrid(value, step) {
   return (Math.round(value / step) * step).toFixed(2);
 }
 
-async function fetchViaProxy(lat, lon) {
+async function fetchTides(lat, lon) {
   // Round to a shared ~11km grid so nearby users hit the same cached
-  // response at the edge instead of each triggering their own WorldTides call.
+  // response at the edge instead of each triggering their own upstream call.
   const gridLat = roundToGrid(lat, 0.1);
   const gridLon = roundToGrid(lon, 0.1);
   const res = await fetch(`/api/tides?lat=${gridLat}&lon=${gridLon}`);
-  if (res.status === 404) return null; // no backend deployed here (e.g. static-only hosting)
   const data = await res.json().catch(() => null);
-  if (!res.ok || !data || data.status !== 200) {
-    const message = (data && data.error) || `Tide request failed (${res.status})`;
-    throw new Error(message);
-  }
-  return data;
-}
 
-async function fetchDirect(lat, lon, apiKey) {
-  const start = Math.floor(Date.now() / 1000) - 86400;
-  const length = 3 * 86400;
-  const url = `${API_BASE}?extremes&datum=MSL&lat=${lat}&lon=${lon}&key=${encodeURIComponent(
-    apiKey
-  )}&start=${start}&length=${length}`;
-  const res = await fetch(url);
-  const data = await res.json().catch(() => null);
-  if (!res.ok || !data || data.status !== 200) {
+  if (!res.ok) {
+    if (data && data.unsupported) {
+      throw new Error(data.message || "Tide data isn't available for this location yet.");
+    }
     const message = (data && data.error) || `Tide request failed (${res.status})`;
     throw new Error(message);
   }
@@ -197,27 +150,17 @@ function render() {
   }
 }
 
+const SOURCE_LABELS = { kartverket: "Norway", noaa: "USA", chs: "Canada" };
+
 async function loadTides() {
   if (!currentCoords) return;
 
   try {
     setStatus("Fetching tide data…");
-    let data = await fetchViaProxy(currentCoords.lat, currentCoords.lon);
-
-    if (data === null) {
-      // No server-side proxy available here — fall back to a user-supplied key.
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        setStatus("Add your WorldTides API key in settings to get started.");
-        openSettings();
-        return;
-      }
-      data = await fetchDirect(currentCoords.lat, currentCoords.lon, apiKey);
-    }
-
+    const data = await fetchTides(currentCoords.lat, currentCoords.lon);
     cachedExtremes = data;
     placeEl.textContent =
-      data.station || `${currentCoords.lat.toFixed(2)}, ${currentCoords.lon.toFixed(2)}`;
+      SOURCE_LABELS[data.source] || `${currentCoords.lat.toFixed(2)}, ${currentCoords.lon.toFixed(2)}`;
     setStatus("");
     render();
   } catch (err) {
