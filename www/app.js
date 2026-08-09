@@ -53,8 +53,16 @@ saveKeyBtn.addEventListener("click", () => {
   start();
 });
 
+function roundToGrid(value, step) {
+  return (Math.round(value / step) * step).toFixed(2);
+}
+
 async function fetchViaProxy(lat, lon) {
-  const res = await fetch(`/api/tides?lat=${lat}&lon=${lon}`);
+  // Round to a shared ~11km grid so nearby users hit the same cached
+  // response at the edge instead of each triggering their own WorldTides call.
+  const gridLat = roundToGrid(lat, 0.1);
+  const gridLon = roundToGrid(lon, 0.1);
+  const res = await fetch(`/api/tides?lat=${gridLat}&lon=${gridLon}`);
   if (res.status === 404) return null; // no backend deployed here (e.g. static-only hosting)
   const data = await res.json().catch(() => null);
   if (!res.ok || !data || data.status !== 200) {
