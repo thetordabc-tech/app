@@ -14,51 +14,117 @@
 
   <div id="ocean">
     <div id="water">
-      <div id="wave-wrap">
-        <svg id="wave-svg" viewBox="0 0 1200 32" preserveAspectRatio="none">
-          <path d="M0,17 C50,6 150,6 200,17 C250,28 350,28 400,17 C450,6 550,6 600,17 C650,28 750,28 800,17 C850,6 950,6 1000,17 C1050,28 1150,28 1200,17 L1200,32 L0,32 Z"></path>
+      <div id="wave-back-wrap">
+        <svg id="wave-back-svg" viewBox="0 0 1200 44" preserveAspectRatio="none">
+          <path d="M0,26 C120,6 260,44 400,24 C540,4 660,42 800,24 C920,8 1040,40 1200,22 L1200,44 L0,44 Z"></path>
         </svg>
       </div>
 
+      <div id="wave-wrap">
+        <svg id="wave-svg" viewBox="0 0 1200 32" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="crestGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d3f4ff"></stop>
+              <stop offset="100%" stop-color="var(--sea-shallow)"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M0,17 C50,6 150,6 200,17 C250,28 350,28 400,17 C450,6 550,6 600,17 C650,28 750,28 800,17 C850,6 950,6 1000,17 C1050,28 1150,28 1200,17 L1200,32 L0,32 Z" fill="url(#crestGrad)"></path>
+          <path d="M0,17 C50,6 150,6 200,17 C250,28 350,28 400,17 C450,6 550,6 600,17 C650,28 750,28 800,17 C850,6 950,6 1000,17 C1050,28 1150,28 1200,17" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.65"></path>
+        </svg>
+      </div>
+
+      <div id="water-sheen"></div>
+
       <div id="tide-arrow-wrap">
-        <span id="tide-arrow">&#8593;</span>
+        <svg id="tide-arrow" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="arrowGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff"></stop>
+              <stop offset="100%" stop-color="#eaf6ff"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M50,3 L92,50 L68,50 L68,97 L32,97 L32,50 L8,50 Z" fill="url(#arrowGrad)" stroke="rgba(6,32,51,0.18)" stroke-width="2" stroke-linejoin="round"></path>
+        </svg>
       </div>
 
       <div id="fish-1" class="fish">
-        <svg viewBox="0 0 40 18">
-          <path d="M10,9 C10,4 18,2 26,4 C32,5.5 36,7 38,9 C36,11 32,12.5 26,14 C18,16 10,14 10,9 Z" fill="#ff8a5c"></path>
-          <path d="M10,9 L2,3 L2,15 Z" fill="#ff8a5c"></path>
-          <circle cx="32" cy="7" r="1.3" fill="#062033"></circle>
+        <svg viewBox="-8 -5 52 26">
+          <defs>
+            <linearGradient id="fishGrad1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ff9d6f"></stop>
+              <stop offset="100%" stop-color="#ff6a35"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M4,10 L-7,4 L-3,10 L-7,16 Z" fill="url(#fishGrad1)"></path>
+          <path d="M4,10 C4,4 14,2 24,3 C32,3.8 38,6 40,10 C38,14 32,16.2 24,17 C14,18 4,16 4,10 Z" fill="url(#fishGrad1)"></path>
+          <path d="M17,3 L21,-3 L25,3 Z" fill="url(#fishGrad1)"></path>
+          <circle cx="33" cy="8" r="1.5" fill="#1a1208"></circle>
+          <circle cx="33.6" cy="7.4" r="0.5" fill="#ffffff"></circle>
         </svg>
       </div>
       <div id="fish-2" class="fish flip">
-        <svg viewBox="0 0 40 18">
-          <path d="M10,9 C10,4 18,2 26,4 C32,5.5 36,7 38,9 C36,11 32,12.5 26,14 C18,16 10,14 10,9 Z" fill="#ffb08a"></path>
-          <path d="M10,9 L2,3 L2,15 Z" fill="#ffb08a"></path>
-          <circle cx="32" cy="7" r="1.3" fill="#062033"></circle>
+        <svg viewBox="-8 -5 52 26">
+          <defs>
+            <linearGradient id="fishGrad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffc7a3"></stop>
+              <stop offset="100%" stop-color="#ff9d6f"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M4,10 L-7,4 L-3,10 L-7,16 Z" fill="url(#fishGrad2)"></path>
+          <path d="M4,10 C4,4 14,2 24,3 C32,3.8 38,6 40,10 C38,14 32,16.2 24,17 C14,18 4,16 4,10 Z" fill="url(#fishGrad2)"></path>
+          <path d="M17,3 L21,-3 L25,3 Z" fill="url(#fishGrad2)"></path>
+          <circle cx="33" cy="8" r="1.5" fill="#1a1208"></circle>
+          <circle cx="33.6" cy="7.4" r="0.5" fill="#ffffff"></circle>
         </svg>
       </div>
       <div id="fish-3" class="fish">
-        <svg viewBox="0 0 40 18">
-          <path d="M10,9 C10,4 18,2 26,4 C32,5.5 36,7 38,9 C36,11 32,12.5 26,14 C18,16 10,14 10,9 Z" fill="#ff6f42"></path>
-          <path d="M10,9 L2,3 L2,15 Z" fill="#ff6f42"></path>
-          <circle cx="32" cy="7" r="1.3" fill="#062033"></circle>
+        <svg viewBox="-8 -5 52 26">
+          <defs>
+            <linearGradient id="fishGrad3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ff8552"></stop>
+              <stop offset="100%" stop-color="#e5501f"></stop>
+            </linearGradient>
+          </defs>
+          <path d="M4,10 L-7,4 L-3,10 L-7,16 Z" fill="url(#fishGrad3)"></path>
+          <path d="M4,10 C4,4 14,2 24,3 C32,3.8 38,6 40,10 C38,14 32,16.2 24,17 C14,18 4,16 4,10 Z" fill="url(#fishGrad3)"></path>
+          <path d="M17,3 L21,-3 L25,3 Z" fill="url(#fishGrad3)"></path>
+          <circle cx="33" cy="8" r="1.5" fill="#1a1208"></circle>
+          <circle cx="33.6" cy="7.4" r="0.5" fill="#ffffff"></circle>
         </svg>
       </div>
 
       <div id="rowboat">
-        <svg viewBox="0 0 90 170">
-          <path d="M78,4 L60,46 L60,155" stroke="#ffffff" stroke-width="1" fill="none" opacity="0.85"></path>
-          <circle cx="60" cy="155" r="3" fill="#ffcf4d"></circle>
-          <line x1="52" y1="16" x2="78" y2="4" stroke="#5a3a1f" stroke-width="2" stroke-linecap="round"></line>
-          <path d="M8,30 C8,26 20,25 45,25 C70,25 82,26 82,30 L74,42 C60,46 30,46 16,42 Z" fill="#9a6a3a"></path>
-          <path d="M8,30 C8,26 20,25 45,25 C70,25 82,26 82,30" stroke="#6b431f" stroke-width="1.5" fill="none"></path>
-          <path d="M40,10 Q45,6 50,10 L48,16 L42,16 Z" fill="#7a4a20"></path>
-          <rect x="40" y="14" width="10" height="14" rx="4" fill="#2c3e50"></rect>
-          <circle cx="45" cy="10" r="6" fill="#e0a978"></circle>
+        <svg viewBox="0 0 100 200">
+          <defs>
+            <linearGradient id="hullGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c08a52"></stop>
+              <stop offset="100%" stop-color="#7a4f28"></stop>
+            </linearGradient>
+            <linearGradient id="jacketGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c25a3f"></stop>
+              <stop offset="100%" stop-color="#8f3f2a"></stop>
+            </linearGradient>
+          </defs>
+
+          <path d="M90,-4 Q76,28 60,52 Q49,112 58,193" stroke="#ffffff" stroke-width="1.4" fill="none" opacity="0.8"></path>
+          <ellipse cx="61" cy="53" rx="7" ry="2" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.35"></ellipse>
+          <circle cx="58" cy="193" r="3.6" fill="#ffcf4d" stroke="#c98f1c" stroke-width="1"></circle>
+
+          <ellipse cx="50" cy="50" rx="42" ry="5" fill="rgba(6,32,51,0.16)"></ellipse>
+
+          <line x1="66" y1="10" x2="90" y2="-4" stroke="#5a3a1f" stroke-width="2.4" stroke-linecap="round"></line>
+          <line x1="57" y1="14" x2="66" y2="10" stroke="#e0a978" stroke-width="3.2" stroke-linecap="round"></line>
+
+          <path d="M8,32 C8,25 24,22 50,22 C76,22 92,25 92,32 L84,45 C70,51 30,51 16,45 Z" fill="url(#hullGrad)"></path>
+          <path d="M14,30 C14,27 26,25 50,25 C74,25 86,27 86,30" stroke="#8a5a30" stroke-width="3" fill="none" opacity="0.55"></path>
+          <path d="M8,32 C8,25 24,22 50,22 C76,22 92,25 92,32" stroke="#4a2e14" stroke-width="2" fill="none" stroke-linecap="round"></path>
+          <rect x="42" y="33" width="16" height="4" rx="2" fill="#5a3820" opacity="0.85"></rect>
+
+          <path d="M43,3 Q51,-5 59,3 L58,8 Q51,4.5 44,8 Z" fill="#2b2b30"></path>
+          <rect x="43" y="8" width="16" height="19" rx="7" fill="url(#jacketGrad)"></rect>
+          <circle cx="51" cy="6" r="7" fill="#e0a978"></circle>
         </svg>
       </div>
-
     </div>
   </div>
 

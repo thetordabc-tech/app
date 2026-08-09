@@ -7,7 +7,7 @@
   --ink-soft: #4a6883;
   --sea-shallow: #8fe0fb;
   --sea-mid: #4fc3ee;
-  --sea-deep: #1f9bd6;
+  --sea-deep: #146fa8;
   --rise: #1f9d55;
   --fall: #c1502a;
 }
@@ -86,8 +86,51 @@ html, body {
   right: 0;
   bottom: 0;
   height: 10%;
-  background: linear-gradient(to bottom, var(--sea-shallow), var(--sea-mid) 55%, var(--sea-deep));
+  background: linear-gradient(
+    180deg,
+    #cdf3ff 0%,
+    var(--sea-shallow) 10%,
+    var(--sea-mid) 48%,
+    var(--sea-deep) 100%
+  );
   transition: height 1.2s ease-in-out;
+  box-shadow: inset 0 18px 36px -18px rgba(6, 32, 51, 0.35);
+}
+
+#water-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+#wave-back-wrap {
+  position: absolute;
+  top: -22px;
+  left: 0;
+  width: 100%;
+  height: 44px;
+  overflow: hidden;
+  opacity: 0.55;
+}
+
+#wave-back-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 44px;
+  fill: var(--sea-shallow);
+  animation: drift-back 15s linear infinite;
+}
+
+@keyframes drift-back {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 #wave-wrap {
@@ -107,7 +150,6 @@ html, body {
   height: 32px;
   animation: drift 9s linear infinite;
 }
-#wave-svg path { fill: var(--sea-shallow); }
 
 @keyframes drift {
   from { transform: translateX(0); }
@@ -115,7 +157,7 @@ html, body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #wave-svg { animation: none; }
+  #wave-svg, #wave-back-svg { animation: none; }
 }
 
 /* --- tide arrow --- */
@@ -140,11 +182,10 @@ html, body {
 
 #tide-arrow {
   display: block;
-  font-size: clamp(56px, 16vw, 108px);
-  line-height: 1;
-  color: #ffffff;
-  opacity: 0.92;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  width: clamp(56px, 16vw, 108px);
+  height: clamp(56px, 16vw, 108px);
+  opacity: 0.96;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
   transition: transform 0.5s ease;
   user-select: none;
 }
@@ -160,16 +201,17 @@ html, body {
   left: 0;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-  opacity: 0.9;
+  opacity: 0.92;
+  filter: drop-shadow(0 1px 2px rgba(6, 32, 51, 0.25));
   pointer-events: none;
 }
 
 .fish svg { display: block; width: 100%; height: 100%; }
 .fish.flip svg { transform: scaleX(-1); }
 
-#fish-1 { bottom: 5%;  width: 30px; height: 17px; animation-name: swim-right; animation-duration: 15s; }
-#fish-2 { bottom: 34%; width: 22px; height: 13px; animation-name: swim-left;  animation-duration: 21s; animation-delay: -4s; }
-#fish-3 { bottom: 58%; width: 26px; height: 15px; animation-name: swim-right; animation-duration: 18s; animation-delay: -9s; }
+#fish-1 { bottom: 5%;  width: 34px; height: 17px; animation-name: swim-right; animation-duration: 15s; }
+#fish-2 { bottom: 34%; width: 25px; height: 12.5px; animation-name: swim-left;  animation-duration: 21s; animation-delay: -4s; }
+#fish-3 { bottom: 58%; width: 29px; height: 14.5px; animation-name: swim-right; animation-duration: 18s; animation-delay: -9s; }
 
 @keyframes swim-right {
   0%   { transform: translate(-15vw, 0); }
@@ -195,12 +237,13 @@ html, body {
 
 #rowboat {
   position: absolute;
-  top: 14px;
+  top: 12px;
   left: 24%;
-  width: 62px;
-  height: 118px;
+  width: 66px;
+  height: 132px;
   transform-origin: 50% 20%;
   animation: rowboat-bob 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 2px 3px rgba(6, 32, 51, 0.3));
   pointer-events: none;
 }
 
@@ -235,7 +278,7 @@ html, body {
   border-radius: 14px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 6px 24px rgba(6, 32, 51, 0.14);
+  box-shadow: 0 6px 24px rgba(6, 32, 51, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 #place {
@@ -254,6 +297,7 @@ html, body {
   font-size: 17px;
   font-weight: 600;
   padding-top: 8px;
+  letter-spacing: 0.02em;
 }
 
 #side-info {
@@ -272,7 +316,7 @@ html, body {
   display: block;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   opacity: 0.85;
 }
@@ -295,7 +339,7 @@ html, body {
 }
 
 .side-row-current .side-value {
-  font-size: 26px;
+  font-size: 27px;
 }
 
 #status {
