@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Remote</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="setup" class="screen">
+    <h1>Samsung TV Remote</h1>
+    <p class="hint">
+      Enter your TV's IP address (Settings → General → Network → Network Status on the TV).
+      Your phone and TV must be on the same WiFi network.
+    </p>
+    <input id="tv-ip" type="text" inputmode="decimal" placeholder="e.g. 192.168.1.42" autocomplete="off" autocapitalize="off" spellcheck="false" />
+    <button id="connect-btn">Connect</button>
+    <p id="setup-error" class="error"></p>
+    <p class="hint small">
+      The first time you connect, your TV will show an "Allow connection?" popup —
+      accept it there. After that this device is remembered.
+    </p>
+  </div>
+
+  <div id="remote" class="screen hidden">
+    <div id="status-bar">
+      <span id="status-dot"></span>
+      <span id="status-text">Connecting…</span>
+      <button id="forget-btn" title="Disconnect / change TV">⚙</button>
+    </div>
+
+    <div class="row top-row">
+      <button class="pill" data-key="KEY_POWER" id="power-btn">⏻</button>
+      <button class="pill" data-key="KEY_SOURCE">Source</button>
+      <button class="pill" data-key="KEY_MUTE">🔇</button>
+    </div>
+
+    <div class="dpad-wrap">
+      <div class="dpad">
+        <button class="dpad-up" data-key="KEY_UP">▲</button>
+        <button class="dpad-left" data-key="KEY_LEFT">◀</button>
+        <button class="dpad-center" data-key="KEY_ENTER">OK</button>
+        <button class="dpad-right" data-key="KEY_RIGHT">▶</button>
+        <button class="dpad-down" data-key="KEY_DOWN">▼</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <button class="pill" data-key="KEY_RETURN">Back</button>
+      <button class="pill" data-key="KEY_HOME">Home</button>
+      <button class="pill" data-key="KEY_MENU">Menu</button>
+    </div>
+
+    <div class="row updown-row">
+      <div class="updown" data-key-up="KEY_VOLUP" data-key-down="KEY_VOLDOWN">
+        <span class="updown-label">Vol</span>
+        <button data-key="KEY_VOLUP">+</button>
+        <button data-key="KEY_VOLDOWN">−</button>
+      </div>
+      <div class="updown" data-key-up="KEY_CHUP" data-key-down="KEY_CHDOWN">
+        <span class="updown-label">Ch</span>
+        <button data-key="KEY_CHUP">+</button>
+        <button data-key="KEY_CHDOWN">−</button>
+      </div>
+    </div>
+
+    <div class="row media-row">
+      <button class="pill small" data-key="KEY_REWIND">⏪</button>
+      <button class="pill small" data-key="KEY_PLAY">▶️</button>
+      <button class="pill small" data-key="KEY_PAUSE">⏸</button>
+      <button class="pill small" data-key="KEY_FF">⏩</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
