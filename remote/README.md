@@ -31,6 +31,37 @@ no app store, no server, no account.
 - Some Samsung TVs require **IP Remote / Mobile Connection** to be enabled:
   **Settings → General → External Device Manager → Device Connect Manager**.
 
+## Deploying the live web app (Vercel)
+
+1. Sign up / log in at [vercel.com](https://vercel.com) and import this GitHub repo
+   as a **new, separate project** from the Tide one.
+2. In the project's setup screen, set **Root Directory** to `remote`.
+3. Framework preset: **Other** (static site, no build step, no environment variables).
+4. Deploy. Vercel gives you a URL like `https://your-project.vercel.app`.
+
+This is independent of the Tide app's own Vercel project — the two are deployed
+separately even though they live in the same repo.
+
+## Wrapping it as an installable app (Capacitor)
+
+Once the Vercel deployment is live, you can wrap it in a native shell for the
+App Store / Play Store using [Capacitor](https://capacitorjs.com/), same as Tide:
+
+1. `capacitor.config.json` has a placeholder `server.url` — replace it with your
+   real Vercel URL from the step above.
+2. Install dependencies: `npm install` (run from inside `remote/`)
+3. Add the native platforms (each only needs to be run once):
+   - iOS (requires a Mac + Xcode): `npm run cap:add:ios`
+   - Android (requires Android Studio): `npm run cap:add:android`
+4. After any change to `capacitor.config.json` or the `www/` folder: `npm run cap:sync`
+5. Open and build in the native IDE:
+   - iOS: `npm run cap:open:ios` → build/sign/archive in Xcode, submit via
+     App Store Connect.
+   - Android: `npm run cap:open:android` → build a signed bundle in Android Studio,
+     submit via Google Play Console.
+
 ## Files
 
-- `index.html`, `style.css`, `app.js` — the whole app (static, no build step)
+- `index.html`, `style.css`, `app.js` — the web app (also mirrored in `www/` for
+  the Capacitor build)
+- `capacitor.config.json`, `package.json` — native app shell configuration

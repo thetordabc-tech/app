@@ -1,0 +1,9 @@
+{
+  "appId": "com.tordabc.remote",
+  "appName": "Remote",
+  "webDir": "www",
+  "server": {
+    "url": "https://your-project.vercel.app",
+    "cleartext": false
+  }
+}

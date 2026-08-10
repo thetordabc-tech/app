@@ -1,0 +1,257 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #0d0f14;
+  color: #f2f4f8;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overscroll-behavior: none;
+  user-select: none;
+}
+
+.screen {
+  min-height: 100%;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Setup screen */
+
+#setup {
+  justify-content: center;
+  gap: 14px;
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#setup h1 {
+  font-size: 1.6rem;
+  margin: 0 0 4px;
+}
+
+.hint {
+  color: #9aa3b2;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hint.small {
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+
+#tv-ip {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  border: 1px solid #2a2f3a;
+  background: #171a21;
+  color: #f2f4f8;
+  text-align: center;
+}
+
+#tv-ip:focus {
+  outline: 2px solid #3b82f6;
+}
+
+#connect-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: #3b82f6;
+  color: white;
+}
+
+#connect-btn:active {
+  background: #2563eb;
+}
+
+.error {
+  color: #f87171;
+  font-size: 0.85rem;
+  min-height: 1.2em;
+  margin: 0;
+}
+
+/* Remote screen */
+
+#remote {
+  gap: 18px;
+  max-width: 420px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 4px;
+  font-size: 0.85rem;
+  color: #9aa3b2;
+}
+
+#status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f59e0b;
+  flex-shrink: 0;
+}
+
+#status-dot.connected {
+  background: #22c55e;
+}
+
+#status-dot.disconnected {
+  background: #ef4444;
+}
+
+#status-text {
+  flex: 1;
+}
+
+#forget-btn {
+  background: none;
+  border: none;
+  color: #9aa3b2;
+  font-size: 1.1rem;
+  padding: 4px 8px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pill {
+  flex: 1;
+  padding: 16px 8px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 14px;
+  background: #1c202a;
+  color: #f2f4f8;
+}
+
+.pill.small {
+  padding: 12px 8px;
+  font-size: 1rem;
+}
+
+.pill:active, .dpad button:active, .updown button:active {
+  background: #2a3040;
+}
+
+#power-btn {
+  color: #ef4444;
+}
+
+.dpad-wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.dpad {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: #1c202a;
+}
+
+.dpad button {
+  position: absolute;
+  border: none;
+  background: transparent;
+  color: #f2f4f8;
+  font-size: 1.3rem;
+}
+
+.dpad-up, .dpad-down {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 72px;
+  height: 72px;
+}
+.dpad-up { top: 4px; }
+.dpad-down { bottom: 4px; }
+
+.dpad-left, .dpad-right {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 72px;
+  height: 72px;
+}
+.dpad-left { left: 4px; }
+.dpad-right { right: 4px; }
+
+.dpad-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #3b82f6;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.dpad-center:active {
+  background: #2563eb;
+}
+
+.updown-row {
+  gap: 24px;
+}
+
+.updown {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1c202a;
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.updown-label {
+  color: #9aa3b2;
+  font-size: 0.85rem;
+  width: 26px;
+}
+
+.updown button {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  background: #262b38;
+  color: #f2f4f8;
+}
+
+.media-row .pill {
+  padding: 14px 4px;
+}
